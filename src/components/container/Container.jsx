@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
+import { Container as MuiContainer } from '@mui/material';
 
-function Container({children}) {
-  return <div className='w-full max-w-7xl mx-auto px-4'>{children}</div>;
+function Container({ children, maxWidth = 'lg' }) {
+  return <MuiContainer maxWidth={maxWidth}>{children}</MuiContainer>;
 }
 
-export default Container
+export default Container;

@@ -35,7 +35,7 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status }) {
+    async updatePost(slug, { title, content, featuredImage, status, userId }) {
         try {
             return await this.tablesDB.updateRow({
                 databaseId: conf.appwriteDatabaseId,
@@ -45,7 +45,8 @@ export class Service {
                     title,
                     content,
                     featuredImage,
-                    status
+                    status,
+                    userId
                 }
             })
 
@@ -127,6 +128,7 @@ export class Service {
     }
 
     getFilePreview(fileId) {
+        if (!fileId) return ""; // prevents 404 request
         return this.bucket.getFileView({
             bucketId: conf.appwriteBucketId,
             fileId: fileId

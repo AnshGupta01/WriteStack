@@ -1,86 +1,159 @@
-import React, {useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
-import { login as authLogin } from '../store/authSlice'
-import {Button, Input, Logo} from "./index"
-import {useDispatch} from "react-redux"
-import authService from "../appwrite/auth"
-import {useForm} from "react-hook-form"
+import React, { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { login as authLogin } from '../store/authSlice';
+import { Button, Input, Logo } from './index';
+import { useDispatch } from 'react-redux';
+import authService from '../appwrite/auth';
+import { useForm } from 'react-hook-form';
+import {
+  Box,
+  Paper,
+  Typography,
+  Alert,
+  Link,
+  Stack,
+  Divider,
+} from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 
 function Login() {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const {register, handleSubmit} = useForm()
-    const [error, setError] = useState("")
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const login = async(data) => {
-        setError("")
-        try {
-            const session = await authService.login(data)
-            if (session) {
-                const userData = await authService.getCurrentUser()
-                if(userData) dispatch(authLogin(userData));
-                navigate("/")
-            }
-        } catch (error) {
-            setError(error.message)
-        }
+  const login = async (data) => {
+    setError('');
+    setLoading(true);
+    try {
+      const session = await authService.login(data);
+      if (session) {
+        const userData = await authService.getCurrentUser();
+        if (userData) dispatch(authLogin(userData));
+        navigate('/');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
   return (
-    <div
-    className='flex items-center justify-center w-full'
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '80vh',
+        py: 4,
+      }}
     >
-        <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-        <div className="mb-2 flex justify-center">
-                    <span className="inline-block w-full max-w-25">
-                        <Logo width="100%" />
-                    </span>
-        </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
-        <p className="mt-2 text-center text-base text-black/60">
-                    Don&apos;t have any account?&nbsp;
-                    <Link
-                        to="/signup"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
-                    >
-                        Sign Up
-                    </Link>
-        </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form onSubmit={handleSubmit(login)} className='mt-8'>
-            <div className='space-y-5'>
-                {/* Email Input Field */}
-                <Input
-                label="Email: "
-                placeholder="Enter your email"
-                type="email"
-                {...register("email", {
-                    required: true,
-                    validate: {
-                        matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                        "Email address must be a valid address",
-                    }
-                })}
-                />
-                {/* Password Input Field */}
-                <Input
-                label="Password: "
-                type="password"
-                placeholder="Enter your password"
-                {...register("password", {
-                    required: true,
-                })}
-                />
-                {/* Submit Button */}
-                <Button
-                type="submit"
-                className="w-full"
-                >Sign in</Button>
-            </div>
+      <Paper
+        elevation={4}
+        sx={{
+          width: '100%',
+          maxWidth: 480,
+          p: { xs: 3, sm: 5 },
+          borderRadius: 3,
+        }}
+      >
+        {/* Logo */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <Logo width="120px" />
+        </Box>
+
+        {/* Title */}
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          sx={{ fontWeight: 700, mb: 1 }}
+        >
+          Welcome Back
+        </Typography>
+        <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>
+          Sign in to continue to WriteStack
+        </Typography>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit(login)}>
+          <Stack spacing={3}>
+            <Input
+              label="Email Address"
+              placeholder="Enter your email"
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                  message: 'Please enter a valid email address',
+                },
+              })}
+            />
+
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Enter your password"
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              fullWidth
+              disabled={loading}
+              startIcon={<LoginIcon />}
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </Button>
+          </Stack>
         </form>
-        </div>
-    </div>
-  )
+
+        {/* Sign Up Link */}
+        <Box sx={{ mt: 3, textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
+            Don't have an account?{' '}
+            <Link
+              component={RouterLink}
+              to="/signup"
+              sx={{
+                fontWeight: 600,
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >
+              Sign Up
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
+  );
 }
 
-export default Login
+export default Login;

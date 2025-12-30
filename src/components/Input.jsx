@@ -1,33 +1,42 @@
-import React, {useId} from 'react'
+import React, { useId } from 'react';
+import { TextField, Box } from '@mui/material';
 
-//Forward ref to allow parent components to access the input element state.
-// This is especially useful when you need to access or manipulate a DOM element directly 
-// within a reusable functional component. It Passes props and a ref
-
-const Input = React.forwardRef( function Input({
+const Input = React.forwardRef(function Input(
+  {
     label,
-    type = "text",
-    className = "",
+    type = 'text',
+    variant = 'outlined',
+    size = 'medium',
+    fullWidth = true,
+    error = false,
+    helperText = '',
+    placeholder,
     ...props
-}, ref){
-    const id = useId()
-    return (
-        <div className='w-full'>
-            {label && <label 
-            className='inline-block mb-1 pl-1' 
-            htmlFor={id}>
-                {label}
-            </label>
-            }
-            <input
-            type={type}
-            className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
-            ref={ref}
-            {...props}
-            id={id}
-            />
-        </div>
-    )
-})
+  },
+  ref
+) {
+  const id = useId();
 
-export default Input
+  return (
+    <Box sx={{ width: '100%' }}>
+      <TextField
+        id={id}
+        label={label}
+        type={type}
+        variant={variant}
+        size={size}
+        fullWidth={fullWidth}
+        error={error}
+        helperText={helperText}
+        placeholder={placeholder}
+        inputRef={ref}
+        InputLabelProps={{
+          shrink: placeholder || type === 'file' ? true : undefined,
+        }}
+        {...props}
+      />
+    </Box>
+  );
+});
+
+export default Input;

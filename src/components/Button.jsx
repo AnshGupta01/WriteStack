@@ -1,16 +1,27 @@
-import React from "react";
+import React from 'react';
+import { Button as MuiButton } from '@mui/material';
 
 export default function Button({
-    children,
-    type = "button",
-    bgColor = "bg-blue-600",
-    textColor = "text-white",
-    className = "",
-    ...props
+  children,
+  type = 'button',
+  variant = 'contained',
+  color = 'primary',
+  size = 'medium',
+  fullWidth = false,
+  disabled = false,
+  ...props
 }) {
-    return (
-        <button className={`px-4 py-2 rounded-lg ${bgColor} ${textColor} ${className}`} {...props}>
-            {children}
-        </button>
-    );
+  return (
+    <MuiButton
+      type={type}
+      variant={variant}
+      color={color}
+      size={size}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      {...props}
+    >
+      {children}
+    </MuiButton>
+  );
 }

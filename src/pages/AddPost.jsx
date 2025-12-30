@@ -1,14 +1,15 @@
-import React from 'react'
-import { Container, PostForm } from '../components'
+import React from 'react';
+import { PostForm } from '../components';
+import { Box, Container } from '@mui/material';
 
 function AddPost() {
   return (
-    <div className='py-8'>
-        <Container>
-            <PostForm />
-        </Container>
-    </div>
-  )
+    <Box sx={{ py: 4 }}>
+      <Container maxWidth="lg">
+        <PostForm />
+      </Container>
+    </Box>
+  );
 }
 
-export default AddPost
+export default AddPost;

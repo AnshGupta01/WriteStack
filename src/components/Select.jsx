@@ -1,29 +1,31 @@
-import React, { useId } from 'react'
+import React, { useId } from 'react';
+import { FormControl, InputLabel, Select as MuiSelect, MenuItem, Box } from '@mui/material';
 
-function Select({
-    options,
-    label,
-    className,
-    ...props
-}, ref) {
-    const id = useId()
-    return (
-        <div className='w-full'>
-            {label && <label htmlFor={id} className=''></label>}
-            <select
-                {...props}
-                id={id}
-                ref={ref}
-                className={`px-3 py-2 rounded-lg bg-white text-black outline-none focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
-            >
-                {options?.map((option) => (
-                    <option key={option} value={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
-        </div>
-    )
+function Select({ options, label, variant = 'outlined', size = 'medium', value, defaultValue, ...props }, ref) {
+  const id = useId();
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <FormControl fullWidth variant={variant} size={size}>
+        {label && <InputLabel id={id}>{label}</InputLabel>}
+        <MuiSelect 
+          labelId={id} 
+          id={id} 
+          label={label} 
+          inputRef={ref}
+          value={value}
+          defaultValue={defaultValue || (options && options.length > 0 ? options[0] : '')}
+          {...props}
+        >
+          {options?.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </MuiSelect>
+      </FormControl>
+    </Box>
+  );
 }
 
-export default React.forwardRef(Select)
+export default React.forwardRef(Select);
