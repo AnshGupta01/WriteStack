@@ -1,4 +1,7 @@
-# WriteStack
+<p align="center">
+  <img src="https://github.com/AnshGupta01/WriteStack/blob/main/public/favicon.svg" width="80" />
+</p>
+<h1 align="center">WriteStack</h1>
 
 A modern, full-stack blogging platform built with React and Appwrite. WriteStack empowers users to create, publish, and manage rich-content blog posts with a sleek dark-themed UI and seamless authentication.
 
@@ -110,3 +113,4 @@ src/
 ---
 
 ## 📸 Screenshots
+![Screenshot](https://github.com/user-attachments/assets/46b774e5-6d16-4d69-98dd-db4f01a9f443)
