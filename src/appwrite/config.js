@@ -1,5 +1,5 @@
 import conf from '../conf/conf.js';
-import { Client, Account, ID, Databases, Storage, Query, TablesDB } from "appwrite";
+import { Client, ID, Storage, Query, TablesDB } from "appwrite";
 
 export class Service {
     client = new Client();
@@ -14,17 +14,16 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, featuredImageId, status, userId }) {
+    async createPost({ title, slug, content, featuredImage, status, userId }) {
         try {
             return await this.tablesDB.createRow({
                 databaseId: conf.appwriteDatabaseId,
                 tableId: conf.appwriteTableId,
-                rowId: ID.unique(),
+                rowId: slug,
                 data: {
                     title,
-                    slug,
                     content,
-                    featuredImageId,
+                    featuredImage,
                     status,
                     userId
                 }
@@ -36,7 +35,7 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImageId, status }) {
+    async updatePost(slug, { title, content, featuredImage, status }) {
         try {
             return await this.tablesDB.updateRow({
                 databaseId: conf.appwriteDatabaseId,
@@ -45,7 +44,7 @@ export class Service {
                 data: {
                     title,
                     content,
-                    featuredImageId,
+                    featuredImage,
                     status
                 }
             })
@@ -128,7 +127,7 @@ export class Service {
     }
 
     getFilePreview(fileId) {
-        return this.bucket.getFilePreview({
+        return this.bucket.getFileView({
             bucketId: conf.appwriteBucketId,
             fileId: fileId
         })

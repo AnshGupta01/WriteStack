@@ -35,6 +35,11 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
+            if (!userData) {
+                console.error("User not authenticated");
+                return;
+            }
+
             const file = await appwriteService.uploadFile(data.image[0]);
 
             if (file) {
