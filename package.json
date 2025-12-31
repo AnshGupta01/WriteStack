@@ -1,5 +1,6 @@
 {
   "name": "writestack",
+  "homepage": "https://anshGupta01.github.io/WriteStack/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -18,6 +21,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tinymce/tinymce-react": "^6.3.0",
     "appwrite": "^21.5.0",
+    "gh-pages": "^6.3.0",
     "html-react-parser": "^5.2.11",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
